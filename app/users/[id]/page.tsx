@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import DeleteUser from "../DeleteUser";
+
 import { db } from "@/lib/db";
 
 type Props = {
@@ -9,7 +9,9 @@ type Props = {
   }>;
 };
 
-export default async function UserPage({ params }: Props) {
+export default async function UserPage({
+  params,
+}: Props) {
   const { id } = await params;
 
   const user = await db.orm.public.User.first({
@@ -21,7 +23,7 @@ export default async function UserPage({ params }: Props) {
   }
 
   return (
-    <main className="user-details">
+    <main className="user-details-page">
       <Link
         href="/users"
         className="back-link"
@@ -29,32 +31,52 @@ export default async function UserPage({ params }: Props) {
         ← Back to Users
       </Link>
 
-      <div className="user-details-card">
-        <h1>{user.name}</h1>
-
-        <div className="user-info">
-          <p>
-            <strong>Username:</strong>
-            <span>{user.username}</span>
-          </p>
-
-          <p>
-            <strong>Email:</strong>
-            <span>{user.email}</span>
-          </p>
+      <section className="user-details-card">
+        <div className="user-details-avatar">
+          {user.name.charAt(0).toUpperCase()}
         </div>
 
-        <div className="user-details-actions">
-          <Link
-            href={`/users/${user.id}/edit`}
-            className="edit-button"
-          >
-            Edit
-          </Link>
+        <div className="user-details-content">
+          <span className="user-details-label">
+            USER PROFILE
+          </span>
 
-          <DeleteUser id={user.id} />
+          <h1>{user.name}</h1>
+
+          <div className="user-details-info">
+            <div>
+              <span>Username</span>
+              <strong>@{user.username}</strong>
+            </div>
+
+            <div>
+              <span>Email</span>
+              <strong>{user.email}</strong>
+            </div>
+          </div>
+
+          <div className="user-details-actions">
+            <Link
+              href={`/users/${user.id}/edit`}
+              className="primary-button"
+            >
+              Edit User
+            </Link>
+
+            <form
+              action={`/api/users/${user.id}`}
+              method="POST"
+            >
+              <button
+                type="submit"
+                className="danger-button"
+              >
+                Delete User
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }

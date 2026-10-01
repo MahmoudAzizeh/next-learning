@@ -87,20 +87,22 @@ export default function EditUser({
       className="user-edit-form"
     >
       {error && (
-        <p className="error-message">
-          {error}
-        </p>
+        <div className="form-alert error-message">
+          <span>!</span>
+          <p>{error}</p>
+        </div>
       )}
 
       {success && (
-        <p className="success-message">
-          {success}
-        </p>
+        <div className="form-alert success-message">
+          <span>✓</span>
+          <p>{success}</p>
+        </div>
       )}
 
       <div className="user-edit-field">
         <label htmlFor="name">
-          Name
+          Full Name
         </label>
 
         <input
@@ -110,6 +112,7 @@ export default function EditUser({
           onChange={(event) =>
             setName(event.target.value)
           }
+          placeholder="Enter full name"
           required
         />
       </div>
@@ -126,13 +129,14 @@ export default function EditUser({
           onChange={(event) =>
             setUsername(event.target.value)
           }
+          placeholder="Enter username"
           required
         />
       </div>
 
       <div className="user-edit-field">
         <label htmlFor="email">
-          Email
+          Email Address
         </label>
 
         <input
@@ -142,19 +146,33 @@ export default function EditUser({
           onChange={(event) =>
             setEmail(event.target.value)
           }
+          placeholder="Enter email address"
           required
         />
       </div>
 
-      <button
-        type="submit"
-        className="user-edit-submit"
-        disabled={saving}
-      >
-        {saving
-          ? "Saving..."
-          : "Save Changes"}
-      </button>
+      <div className="user-form-actions">
+        <button
+          type="button"
+          className="user-form-cancel"
+          onClick={() =>
+            router.push(`/users/${id}`)
+          }
+          disabled={saving}
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          className="user-edit-submit"
+          disabled={saving}
+        >
+          {saving
+            ? "Saving..."
+            : "Save Changes →"}
+        </button>
+      </div>
     </form>
   );
 }

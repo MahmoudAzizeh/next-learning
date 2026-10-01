@@ -24,21 +24,50 @@ export default async function EditUserPage({
   }
 
   return (
-    <main>
-      <Link href={`/users/${id}`}>
-        ← Back to User
-      </Link>
+    <main className="user-form-page">
+      <div className="user-form-container">
+        <Link
+          href={`/users/${id}`}
+          className="back-link"
+        >
+          ← Back to User
+        </Link>
 
-      <h1 className="users-title">
-  Edit User
-</h1>
+        <div className="user-form-header">
+          <div className="user-form-icon">✦</div>
 
-      <EditUser
-        id={user.id}
-        name={user.name}
-        username={user.username}
-        email={user.email}
-      />
+          <div>
+            <p className="user-form-eyebrow">
+              USER MANAGEMENT
+            </p>
+
+            <h1 className="user-form-title">
+              Edit User
+            </h1>
+
+            <p className="user-form-description">
+              Update this user's information below.
+            </p>
+          </div>
+        </div>
+
+        <div className="user-form-card">
+          <div className="user-form-card-header">
+            <h2>Personal Information</h2>
+
+            <p>
+              Keep the user's details up to date.
+            </p>
+          </div>
+
+          <EditUser
+            id={user.id}
+            name={user.name}
+            username={user.username}
+            email={user.email}
+          />
+        </div>
+      </div>
     </main>
   );
 }

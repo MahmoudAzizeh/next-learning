@@ -8,14 +8,11 @@ export default function NewUserPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [username, setUsername] =
-    useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
-  const [creating, setCreating] =
-    useState(false);
-  const [success, setSuccess] =
-    useState("");
+  const [creating, setCreating] = useState(false);
+  const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(
@@ -28,35 +25,26 @@ export default function NewUserPage() {
     setError("");
 
     try {
-      const response = await fetch(
-        "/api/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            username,
-            email,
-          }),
-        }
-      );
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          email,
+        }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(
-          data.message ||
-            "Something went wrong!"
-        );
+        setError(data.message || "Something went wrong!");
         return;
       }
 
-      setSuccess(
-        "User created successfully!"
-      );
+      setSuccess("User created successfully!");
 
       setName("");
       setUsername("");
@@ -67,106 +55,142 @@ export default function NewUserPage() {
       }, 1000);
     } catch (error) {
       console.error(error);
-
-      setError(
-        "Something went wrong. Please try again."
-      );
+      setError("Something went wrong. Please try again.");
     } finally {
       setCreating(false);
     }
   }
 
   return (
-    <main>
-      <Link
-        href="/users"
-        className="back-link"
-      >
-        ← Back to Users
-      </Link>
+    <main className="new-user-page">
+      <div className="new-user-container">
+        <Link href="/users" className="back-link">
+          ← Back to Users
+        </Link>
 
-      <h1 className="users-title">
-        Add New User
-      </h1>
+        <div className="new-user-header">
+          <div>
+            <span className="page-badge">USER MANAGEMENT</span>
 
-      {error && (
-        <p className="error-message">
-          {error}
-        </p>
-      )}
+            <h1>Add New User</h1>
 
-      {success && (
-        <p className="success-message">
-          {success}
-        </p>
-      )}
+            <p>
+              Create a new user account by filling out the
+              information below.
+            </p>
+          </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="user-edit-form"
-      >
-        <div className="user-edit-field">
-          <label htmlFor="name">
-            Name
-          </label>
-
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(event) =>
-              setName(event.target.value)
-            }
-            required
-          />
+          <div className="new-user-icon">
+            +
+          </div>
         </div>
 
-        <div className="user-edit-field">
-          <label htmlFor="username">
-            Username
-          </label>
+        {error && (
+          <div className="alert alert-error">
+            <span>!</span>
+            <p>{error}</p>
+          </div>
+        )}
 
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(event) =>
-              setUsername(
-                event.target.value
-              )
-            }
-            required
-          />
-        </div>
+        {success && (
+          <div className="alert alert-success">
+            <span>✓</span>
+            <p>{success}</p>
+          </div>
+        )}
 
-        <div className="user-edit-field">
-          <label htmlFor="email">
-            Email
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) =>
-              setEmail(
-                event.target.value
-              )
-            }
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="user-edit-submit"
-          disabled={creating}
+        <form
+          onSubmit={handleSubmit}
+          className="new-user-form"
         >
-          {creating
-            ? "Creating..."
-            : "Create User"}
-        </button>
-      </form>
+          <div className="form-section">
+            <h2>Personal Information</h2>
+            <p className="form-section-description">
+              Enter the user's basic information.
+            </p>
+
+            <div className="form-grid">
+              <div className="form-field">
+                <label htmlFor="name">
+                  Full Name
+                </label>
+
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(event) =>
+                    setName(event.target.value)
+                  }
+                  required
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="username">
+                  Username
+                </label>
+
+                <input
+                  id="username"
+                  type="text"
+                  placeholder="johndoe"
+                  value={username}
+                  onChange={(event) =>
+                    setUsername(event.target.value)
+                  }
+                  required
+                />
+              </div>
+
+              <div className="form-field form-field-full">
+                <label htmlFor="email">
+                  Email Address
+                </label>
+
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="john@example.com"
+                  value={email}
+                  onChange={(event) =>
+                    setEmail(event.target.value)
+                  }
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <Link
+              href="/users"
+              className="cancel-button"
+            >
+              Cancel
+            </Link>
+
+            <button
+              type="submit"
+              className="user-edit-submit"
+              disabled={creating}
+            >
+              {creating ? (
+                <>
+                  <span className="button-spinner" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  Create User
+                  <span>→</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }
