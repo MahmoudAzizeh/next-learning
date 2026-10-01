@@ -2,19 +2,24 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="navbar">
+    <header className="navbar">
       <div className="nav-container">
         <Link href="/" className="logo">
-          My App
+          <span className="logo-icon">✦</span>
+          <span>My App</span>
         </Link>
 
-        <div className="nav-links">
+        <nav className="nav-links">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/users">Users</Link>
-        </div>
+        </nav>
+
+        <Link href="/contact" className="nav-button">
+          Get Started →
+        </Link>
       </div>
-    </nav>
+    </header>
   );
 }

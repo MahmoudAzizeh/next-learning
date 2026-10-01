@@ -8,8 +8,6 @@ import { sortUsers } from "./sortUsers";
 import { getPagination } from "./pagination";
 import { getUsersPageUrl } from "./links";
 
-
-
 type Props = {
   searchParams: Promise<{
     search?: string;
@@ -24,12 +22,7 @@ const USERS_PER_PAGE = 5;
 export default async function UsersPage({
   searchParams,
 }: Props) {
-  const {
-    search,
-    page,
-    deleted,
-    sort,
-  } = await searchParams;
+  const { search, page, deleted, sort } = await searchParams;
 
   const normalizedSearch = search?.trim();
 
@@ -45,29 +38,17 @@ export default async function UsersPage({
     ? await db.orm.public.User
         .where((user) =>
           or(
-            user.name.ilike(
-              `%${normalizedSearch}%`
-            ),
-            user.username.ilike(
-              `%${normalizedSearch}%`
-            ),
-            user.email.ilike(
-              `%${normalizedSearch}%`
-            )
+            user.name.ilike(`%${normalizedSearch}%`),
+            user.username.ilike(`%${normalizedSearch}%`),
+            user.email.ilike(`%${normalizedSearch}%`)
           )
         )
         .all()
     : await db.orm.public.User.all();
 
-  const sortedUsers = sortUsers(
-    users,
-    sortOption
-  );
+  const sortedUsers = sortUsers(users, sortOption);
 
-  const currentPage = Math.max(
-    Number(page) || 1,
-    1
-  );
+  const currentPage = Math.max(Number(page) || 1, 1);
 
   const {
     totalPages,
@@ -80,124 +61,234 @@ export default async function UsersPage({
     USERS_PER_PAGE
   );
 
-  const paginatedUsers =
-    sortedUsers.slice(
-      startIndex,
-      endIndex
-    );
+  const paginatedUsers = sortedUsers.slice(
+    startIndex,
+    endIndex
+  );
 
   return (
-    <main>
-      <div className="users-header">
-        <h1 className="users-title">
-          Users
-        </h1>
+    <main className="users-page">
+
+      {/* Header */}
+      <section className="users-hero">
+        <div>
+          <span className="users-label">
+            USER MANAGEMENT
+          </span>
+
+          <h1>
+            Manage your{" "}
+            <span>users.</span>
+          </h1>
+
+          <p>
+            Search, organize, and manage all users
+            from one simple dashboard.
+          </p>
+        </div>
 
         <Link
           href="/users/new"
-          className="add-button"
+          className="users-add-button"
         >
-          + Add New User
+          <span>+</span>
+          Add New User
         </Link>
-      </div>
+      </section>
 
-      {deleted === "true" && (
-        <DeleteSuccessMessage />
-      )}
 
-      <form className="users-search">
-        <input
-          type="text"
-          name="search"
-          placeholder="Search users..."
-          defaultValue={search || ""}
-        />
+      {/* Stats */}
+      <section className="users-stats">
 
-        <select
-          name="sort"
-          defaultValue={sortOption}
-        >
-          <option value="name-asc">
-            Name A → Z
-          </option>
+        <div className="users-stat">
+          <div className="users-stat-icon">👥</div>
 
-          <option value="name-desc">
-            Name Z → A
-          </option>
+          <div>
+            <strong>{sortedUsers.length}</strong>
+            <span>Total Users</span>
+          </div>
+        </div>
 
-          <option value="newest">
-            Newest
-          </option>
+        <div className="users-stat">
+          <div className="users-stat-icon">📄</div>
 
-          <option value="oldest">
-            Oldest
-          </option>
-        </select>
+          <div>
+            <strong>{safePage}</strong>
+            <span>Current Page</span>
+          </div>
+        </div>
 
-        <button type="submit">
-          Search
-        </button>
+        <div className="users-stat">
+          <div className="users-stat-icon">🔎</div>
 
-        {(search || sort) && (
-          <Link href="/users">
-            Clear
-          </Link>
+          <div>
+            <strong>
+              {normalizedSearch ? "Active" : "All"}
+            </strong>
+            <span>Search Filter</span>
+          </div>
+        </div>
+
+      </section>
+
+
+      {/* Content */}
+      <section className="users-content">
+
+        {deleted === "true" && (
+          <DeleteSuccessMessage />
         )}
-      </form>
 
-      {paginatedUsers.length === 0 ? (
-        <div className="no-users">
-          <h2>No users found</h2>
 
-          <p>
-            Try a different search.
-          </p>
-        </div>
-      ) : (
-        paginatedUsers.map((user) => (
-          <UserCard
-            key={user.id}
-            user={user}
-          />
-        ))
-      )}
+        {/* Search */}
+        <div className="users-toolbar">
 
-      {sortedUsers.length >
-        USERS_PER_PAGE && (
-        <div className="pagination">
-          {safePage > 1 && (
-            <Link
-              href={getUsersPageUrl({
-                page: safePage - 1,
-                search,
-                sort,
-              })}
-              className="pagination-button"
+          <form className="users-search">
+
+            <div className="search-input-wrapper">
+              <span>⌕</span>
+
+              <input
+                type="text"
+                name="search"
+                placeholder="Search by name, username or email..."
+                defaultValue={search || ""}
+              />
+            </div>
+
+
+            <select
+              name="sort"
+              defaultValue={sortOption}
             >
-              ← Previous
-            </Link>
-          )}
+              <option value="name-asc">
+                Name A → Z
+              </option>
 
-          <span className="pagination-info">
-            Page {safePage} of {totalPages}
-          </span>
+              <option value="name-desc">
+                Name Z → A
+              </option>
 
-          {safePage < totalPages && (
-            <Link
-              href={getUsersPageUrl({
-                page: safePage + 1,
-                search,
-                sort,
-              })}
-              className="pagination-button"
-            >
-              Next →
-            </Link>
-          )}
+              <option value="newest">
+                Newest
+              </option>
+
+              <option value="oldest">
+                Oldest
+              </option>
+            </select>
+
+
+            <button type="submit">
+              Search
+            </button>
+
+
+            {(search || sort) && (
+              <Link href="/users" className="clear-search">
+                Clear
+              </Link>
+            )}
+
+          </form>
+
         </div>
-      )}
+
+
+        {/* Users */}
+        {paginatedUsers.length === 0 ? (
+
+          <div className="no-users">
+
+            <div className="no-users-icon">
+              🔍
+            </div>
+
+            <h2>No users found</h2>
+
+            <p>
+              We couldn't find any users matching your search.
+              Try another keyword.
+            </p>
+
+            <Link href="/users">
+              Show all users
+            </Link>
+
+          </div>
+
+        ) : (
+
+          <div className="users-list">
+
+            {paginatedUsers.map((user) => (
+              <UserCard
+                key={user.id}
+                user={user}
+              />
+            ))}
+
+          </div>
+
+        )}
+
+
+        {/* Pagination */}
+        {sortedUsers.length > USERS_PER_PAGE && (
+
+          <div className="pagination">
+
+            {safePage > 1 ? (
+              <Link
+                href={getUsersPageUrl({
+                  page: safePage - 1,
+                  search,
+                  sort,
+                })}
+                className="pagination-button"
+              >
+                ← Previous
+              </Link>
+            ) : (
+              <span className="pagination-disabled">
+                ← Previous
+              </span>
+            )}
+
+
+            <div className="pagination-center">
+              <span>Page</span>
+              <strong>{safePage}</strong>
+              <span>of</span>
+              <strong>{totalPages}</strong>
+            </div>
+
+
+            {safePage < totalPages ? (
+              <Link
+                href={getUsersPageUrl({
+                  page: safePage + 1,
+                  search,
+                  sort,
+                })}
+                className="pagination-button"
+              >
+                Next →
+              </Link>
+            ) : (
+              <span className="pagination-disabled">
+                Next →
+              </span>
+            )}
+
+          </div>
+
+        )}
+
+      </section>
 
       <BackToTop />
+
     </main>
   );
 }

@@ -12,6 +12,7 @@ export default function BackToTop() {
     <button
       type="button"
       onClick={handleClick}
+      className="back-to-top"
     >
       ↑ Back to Top
     </button>

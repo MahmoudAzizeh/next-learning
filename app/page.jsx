@@ -1,71 +1,166 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="home-page">
-      {/* Hero Section */}
+
+      {/* Hero */}
       <section className="hero">
         <div className="hero-content">
-          <h1>Welcome to My App</h1>
+
+          <div className="badge">
+            ✨ Modern Next.js Application
+          </div>
+
+          <h1>
+            Build something
+            <span> amazing.</span>
+          </h1>
 
           <p>
-            A simple and modern web application built with Next.js.
-            Explore our website and discover what we have to offer.
+            A modern web application built with Next.js,
+            designed to be fast, beautiful, and easy to use.
           </p>
 
           <div className="hero-buttons">
-            <a href="/users" className="primary-button">
-              View Users
-            </a>
+            <Link href="/users" className="btn btn-primary">
+              Explore Users →
+            </Link>
 
-            <a href="/about" className="secondary-button">
+            <Link href="/about" className="btn btn-secondary">
               Learn More
-            </a>
+            </Link>
           </div>
+
+          <div className="hero-note">
+            ⚡ Fast &nbsp; • &nbsp; 🔒 Secure &nbsp; • &nbsp; 📱 Responsive
+          </div>
+
+        </div>
+
+        <div className="hero-glow glow-one"></div>
+        <div className="hero-glow glow-two"></div>
+      </section>
+
+
+      {/* Stats */}
+      <section className="stats">
+        <div className="stat-card">
+          <strong>100%</strong>
+          <span>Responsive</span>
+        </div>
+
+        <div className="stat-card">
+          <strong>24/7</strong>
+          <span>Available</span>
+        </div>
+
+        <div className="stat-card">
+          <strong>Fast</strong>
+          <span>Performance</span>
+        </div>
+
+        <div className="stat-card">
+          <strong>Next.js</strong>
+          <span>Powered</span>
         </div>
       </section>
+
 
       {/* Features */}
       <section className="features">
-        <h2>What We Offer</h2>
+
+        <div className="section-heading">
+          <span>FEATURES</span>
+          <h2>Everything you need to get started</h2>
+          <p>
+            A clean foundation with modern technologies and
+            a beautiful user experience.
+          </p>
+        </div>
+
 
         <div className="feature-grid">
+
           <div className="feature-card">
-            <h3>👥 Users</h3>
+            <div className="feature-icon">⚡</div>
+            <h3>Fast Performance</h3>
             <p>
-              Browse and manage users easily through our user management page.
+              Optimized with Next.js to deliver fast loading
+              times and smooth navigation.
             </p>
-            <a href="/users">View Users →</a>
           </div>
 
           <div className="feature-card">
-            <h3>ℹ️ About Us</h3>
+            <div className="feature-icon">🎨</div>
+            <h3>Modern Design</h3>
             <p>
-              Learn more about our application and what we are building.
+              A clean and modern interface designed to look
+              great on every screen.
             </p>
-            <a href="/about">About Us →</a>
           </div>
 
           <div className="feature-card">
-            <h3>📩 Contact</h3>
+            <div className="feature-icon">📱</div>
+            <h3>Fully Responsive</h3>
             <p>
-              Have a question? Get in touch with us through our contact page.
+              The application automatically adapts to phones,
+              tablets, and desktop screens.
             </p>
-            <a href="/contact">Contact Us →</a>
           </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">🔐</div>
+            <h3>Secure & Reliable</h3>
+            <p>
+              Built with a solid architecture that can grow
+              with your application.
+            </p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">🚀</div>
+            <h3>Easy to Scale</h3>
+            <p>
+              Start small and easily add new features as your
+              project grows.
+            </p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">💡</div>
+            <h3>Developer Friendly</h3>
+            <p>
+              Simple structure and clean components make
+              development easier.
+            </p>
+          </div>
+
         </div>
       </section>
 
-      {/* Call to Action */}
+
+      {/* CTA */}
       <section className="cta">
-        <h2>Ready to Get Started?</h2>
 
-        <p>
-          Explore the application and see what it can do.
-        </p>
+        <div>
+          <span className="cta-label">READY TO EXPLORE?</span>
 
-        <a href="/users" className="primary-button">
-          Get Started
-        </a>
+          <h2>
+            Let's build something great.
+          </h2>
+
+          <p>
+            Explore the application and discover what it can do.
+          </p>
+        </div>
+
+        <Link href="/contact" className="btn btn-white">
+          Contact Us →
+        </Link>
+
       </section>
+
     </main>
   );
 }

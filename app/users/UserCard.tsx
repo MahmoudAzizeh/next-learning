@@ -14,30 +14,59 @@ type UserCardProps = {
 export default function UserCard({
   user,
 }: UserCardProps) {
+  const initials = user.name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <div className="user-card">
-      <h2>{user.name}</h2>
+    <article className="user-card">
 
-      <p>
-        Username: {user.username}
-      </p>
+      {/* User */}
+      <div className="user-main">
 
-      <p>
-        Email: {user.email}
-      </p>
+        <div className="user-avatar">
+          {initials}
+        </div>
 
+        <div className="user-info">
+
+          <h2>{user.name}</h2>
+
+          <p className="user-username">
+            @{user.username}
+          </p>
+
+          <p className="user-email">
+            {user.email}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      {/* Actions */}
       <div className="user-actions">
-        <Link href={`/users/${user.id}`}>
+
+        <Link
+          href={`/users/${user.id}`}
+          className="user-view-button"
+        >
           View User
         </Link>
 
         <Link
           href={`/users/${user.id}/edit`}
-          className="edit-button"
+          className="user-edit-button"
         >
           Edit
         </Link>
+
       </div>
-    </div>
+
+    </article>
   );
 }
